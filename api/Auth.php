@@ -8,6 +8,7 @@ use zcrmsdk\oauth\ZohoOAuth;
 
 class Auth
 {
+  public const currentUserEmail = "support@wellnessliving.com";
 
   public function __construct()
   {
@@ -15,7 +16,7 @@ class Auth
       "client_id"=>"1000.YZO05BI18M18TAUKJGUA38BKMVNYKH",
       "client_secret"=>"e17bc239cf031167f2a20cfc707a518383c04a5cb0",
       "redirect_uri"=>"https://www.wellnessliving.com",
-      "currentUserEmail"=>"support@wellnessliving.com",
+      "currentUserEmail"=>self::currentUserEmail,
       "token_persistence_path"=>__DIR__."/../token_storage"
     ];
     ZCRMRestClient::initialize($configuration);
@@ -32,13 +33,19 @@ class Auth
   {
     $oAuthClient = ZohoOAuth::getClientInstance();
     $refreshToken = "paste_the_refresh_token_here";
-    $userIdentifier = "provide_user_identifier_like_email_here";
+    $userIdentifier = self::currentUserEmail;
     $oAuthTokens = $oAuthClient->generateAccessTokenFromRefreshToken($refreshToken,$userIdentifier);
     echo $oAuthTokens;
   }
 
   public function getAuthToken()
   {
+
+    #https://www.zoho.com/crm/developer/docs/api/access-refresh.html
+    #https://www.zoho.com/crm/developer/docs/api/external-oauth.html
+
+
+
     $username = "support@wellnessliving.com";
     $password = "\\;'>?}9?=s=93Na";
     $param = "SCOPE=ZohoCRM/crmapi&EMAIL_ID=".$username."&PASSWORD=".$password;
