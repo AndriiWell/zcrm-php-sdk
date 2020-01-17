@@ -202,3 +202,14 @@ Trace::#0 D:\OpenServer\OSPanel\domains\zcrm-php-sdk\vendor\zohocrm\php-sdk\src\
 #6 D:\OpenServer\OSPanel\domains\zcrm-php-sdk\api\Auth.php(45): zcrmsdk\crm\setup\restclient\ZCRMRestClient::getOrganizationDetails()
 #7 D:\OpenServer\OSPanel\domains\zcrm-php-sdk\api\Auth.php(79): api\auth\Auth->doo()
 #8 {main}
+2020-01-17 15:14:02 INFO: Access Token has expired. Hence refreshing.
+2020-01-17 15:14:04 ERROR: zcrmsdk\crm\exception\ZCRMException Caused by:'invalid oauth scope to access this URL' in /var/www/zoho-crm-php-sdk/vendor/zohocrm/php-sdk/src/crm/api/response/APIResponse.php(93)
+Trace::#0 /var/www/zoho-crm-php-sdk/vendor/zohocrm/php-sdk/src/crm/api/response/CommonAPIResponse.php(76): zcrmsdk\crm\api\response\APIResponse->handleForFaultyResponses()
+#1 /var/www/zoho-crm-php-sdk/vendor/zohocrm/php-sdk/src/crm/api/response/CommonAPIResponse.php(67): zcrmsdk\crm\api\response\CommonAPIResponse->processResponse()
+#2 /var/www/zoho-crm-php-sdk/vendor/zohocrm/php-sdk/src/crm/api/response/APIResponse.php(34): zcrmsdk\crm\api\response\CommonAPIResponse->__construct('HTTP/1.1 401 \r\n...', 401, NULL)
+#3 /var/www/zoho-crm-php-sdk/vendor/zohocrm/php-sdk/src/crm/api/APIRequest.php(122): zcrmsdk\crm\api\response\APIResponse->__construct('HTTP/1.1 401 \r\n...', 401)
+#4 /var/www/zoho-crm-php-sdk/vendor/zohocrm/php-sdk/src/crm/api/handler/OrganizationAPIHandler.php(121): zcrmsdk\crm\api\APIRequest->getAPIResponse()
+#5 /var/www/zoho-crm-php-sdk/vendor/zohocrm/php-sdk/src/crm/setup/restclient/ZCRMRestClient.php(134): zcrmsdk\crm\api\handler\OrganizationAPIHandler->getOrganizationDetails()
+#6 /var/www/zoho-crm-php-sdk/api/Auth.php(45): zcrmsdk\crm\setup\restclient\ZCRMRestClient::getOrganizationDetails()
+#7 /var/www/zoho-crm-php-sdk/api/Auth.php(79): api\auth\Auth->doo()
+#8 {main}

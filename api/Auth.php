@@ -37,11 +37,40 @@ class Auth
     echo $oAuthTokens;
   }
 
+  public function getAuthToken()
+  {
+    $username = "support@wellnessliving.com";
+    $password = "\\;'>?}9?=s=93Na";
+    $param = "SCOPE=ZohoCRM/crmapi&EMAIL_ID=".$username."&PASSWORD=".$password;
+    $ch = curl_init("https://accounts.zoho.com/apiauthtoken/nb/create");
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $param);
+    $result = curl_exec($ch);
+    /*This part of the code below will separate the Authtoken from the result.
+    Remove this part if you just need only the result*/
+    print_r($result);
+    $anArray = explode("\n",$result);
+    $authToken = explode("=",$anArray['2']);
+    $cmp = strcmp($authToken['0'],"AUTHTOKEN");
+    echo $anArray['2']."";
+    curl_close($ch);
+    if ($cmp == 0)
+    {
+      echo "Created Authtoken is : ".$authToken['1'];
+      file_put_contents(__DIR__."/../token_storage/token.txt", $authToken['1']);
+      return $authToken['1'];
+    }
+    return null;
+  }
+
   public function doo()
   {
+    #$this->getAuthToken();exit;
     echo __METHOD__."\n";
     $rest=ZCRMRestClient::getInstance();//to get the rest client
-    #self::generateAccessTokenFromGrantToken();
+    self::generateAccessTokenFromGrantToken();
+
     $orgIns=$rest->getOrganizationDetails()->getData();//to get the organization in form of ZCRMOrganization instance
     echo $orgIns->getCompanyName();//to get the company name of the organization
     echo $orgIns->getOrgId();//to get the organization id of the organization
