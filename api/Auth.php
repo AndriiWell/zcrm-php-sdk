@@ -16,7 +16,7 @@ class Auth
       "client_secret"=>"e17bc239cf031167f2a20cfc707a518383c04a5cb0",
       "redirect_uri"=>"https://www.wellnessliving.com",
       "currentUserEmail"=>"support@wellnessliving.com",
-      "token_persistence_path"=>"/var/www/zoho-crm-php-sdk/token_storage"
+      "token_persistence_path"=>__DIR__."/../token_storage"
     ];
     ZCRMRestClient::initialize($configuration);
   }
@@ -24,9 +24,8 @@ class Auth
   public static function generateAccessTokenFromGrantToken()
   {
     $oAuthClient = ZohoOAuth::getClientInstance();
-    $grantToken = "paste_the_self_autho1rized_grant_token_here";
+    $grantToken = "1000.3c24f810690b4d21079c9139333693f7.4cd9659e25356f6c2982ac764a4d821d";
     $oAuthTokens = $oAuthClient->generateAccessToken($grantToken);
-    echo $oAuthTokens;
   }
 
   public static function generateAccessTokenFromRefreshToken()
@@ -42,8 +41,8 @@ class Auth
   {
     echo __METHOD__."\n";
     $rest=ZCRMRestClient::getInstance();//to get the rest client
-    self::generateAccessTokenFromGrantToken();
-    /*$orgIns=$rest->getOrganizationDetails()->getData();//to get the organization in form of ZCRMOrganization instance
+    #self::generateAccessTokenFromGrantToken();
+    $orgIns=$rest->getOrganizationDetails()->getData();//to get the organization in form of ZCRMOrganization instance
     echo $orgIns->getCompanyName();//to get the company name of the organization
     echo $orgIns->getOrgId();//to get the organization id of the organization
     echo $orgIns->getCountryCode();//to get the country code of the organization
@@ -72,7 +71,7 @@ class Auth
     echo $orgIns->getPaidType();//to get the paid type
     echo $orgIns->getTrialType();//to get the trial type
     echo $orgIns->getTrialExpiry();//to get the trial expiration
-    echo $orgIns->getZipCode();//to get the zip code of the organization*/
+    echo $orgIns->getZipCode();//to get the zip code of the organization
   }
 }
 
