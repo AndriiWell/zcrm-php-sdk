@@ -25,7 +25,7 @@ class Auth
   public static function generateAccessTokenFromGrantToken()
   {
     $oAuthClient = ZohoOAuth::getClientInstance();
-    $grantToken = "1000.3c24f810690b4d21079c9139333693f7.4cd9659e25356f6c2982ac764a4d821d";
+    $grantToken = "1000.13e7f9bd58557a3784085bcc0943df03.c40d278739e1ce91a48bc8cab9895a3e";
     $oAuthTokens = $oAuthClient->generateAccessToken($grantToken);
   }
 
