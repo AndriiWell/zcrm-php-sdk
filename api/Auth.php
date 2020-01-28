@@ -8,7 +8,7 @@ use zcrmsdk\oauth\ZohoOAuth;
 
 class Auth
 {
-  public const currentUserEmail = "support@wellnessliving.com";
+  public const userEmail = "support@wellnessliving.com";
 
   public function __construct()
   {
