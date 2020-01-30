@@ -440,3 +440,15 @@ Trace::#0 D:\OpenServer\OSPanel\domains\zcrm-php-sdk\vendor\zohocrm\php-sdk\src\
 #5 D:\OpenServer\OSPanel\domains\zcrm-php-sdk\zoho-api\Calls.php(148): zohoApi\Calls->getRecords()
 #6 {main}
 2020-01-26 21:14:55 INFO: Access Token has expired. Hence refreshing.
+2020-01-30 18:36:15 INFO: Access Token has expired. Hence refreshing.
+2020-01-30 18:36:17 ERROR: zcrmsdk\crm\exception\ZCRMException Caused by:'Internal Server Error' in /var/www/test-zoho/zcrm-php-sdk/vendor/zohocrm/php-sdk/src/crm/api/response/BulkAPIResponse.php(72)
+Trace::#0 /var/www/test-zoho/zcrm-php-sdk/vendor/zohocrm/php-sdk/src/crm/api/response/CommonAPIResponse.php(76): zcrmsdk\crm\api\response\BulkAPIResponse->handleForFaultyResponses()
+#1 /var/www/test-zoho/zcrm-php-sdk/vendor/zohocrm/php-sdk/src/crm/api/response/CommonAPIResponse.php(67): zcrmsdk\crm\api\response\CommonAPIResponse->processResponse()
+#2 /var/www/test-zoho/zcrm-php-sdk/vendor/zohocrm/php-sdk/src/crm/api/response/BulkAPIResponse.php(47): zcrmsdk\crm\api\response\CommonAPIResponse->__construct('HTTP/1.1 500 \r\n...', 500)
+#3 /var/www/test-zoho/zcrm-php-sdk/vendor/zohocrm/php-sdk/src/crm/api/APIRequest.php(148): zcrmsdk\crm\api\response\BulkAPIResponse->__construct('HTTP/1.1 500 \r\n...', 500)
+#4 /var/www/test-zoho/zcrm-php-sdk/vendor/zohocrm/php-sdk/src/crm/api/handler/MassEntityAPIHandler.php(291): zcrmsdk\crm\api\APIRequest->getBulkAPIResponse()
+#5 /var/www/test-zoho/zcrm-php-sdk/vendor/zohocrm/php-sdk/src/crm/crud/ZCRMModule.php(1082): zcrmsdk\crm\api\handler\MassEntityAPIHandler->getRecords(Array, Array)
+#6 /var/www/test-zoho/zcrm-php-sdk/vendor/zohocrm/php-sdk/src/crm/crud/ZCRMCustomView.php(421): zcrmsdk\crm\crud\ZCRMModule->getRecords(Array, Array)
+#7 /var/www/test-zoho/zcrm-php-sdk/api/Exampl.php(142): zcrmsdk\crm\crud\ZCRMCustomView->getRecords(Array, Array)
+#8 /var/www/test-zoho/zcrm-php-sdk/api/Exampl.php(633): api\auth\Exampl->getrecords()
+#9 {main}

@@ -622,7 +622,13 @@ class Exampl
       echo $ex->getFile(); // To get the file name that throws the Exception
     }
   }
+
+  public function searchRecords(){
+
+
+  }
 }
 
 $a = new Exampl();
 $a->getRecord1s();
+//https://www.zoho.com/crm/developer/docs/php-sdk/record-samples.html  Get Records in a Related List
