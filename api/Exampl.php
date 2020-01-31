@@ -385,40 +385,61 @@ class Exampl
   }
   public function getRecord1s()
   {
-
+    $activity_types = [];
+    $page = 1;
+    $per_page = 200;
     $result_arr = [];
+    $time_since = "2019-09-15T15:26:49+05:30";
     $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance("Activities"); // To get module instance
     /* For VERSION <=2.0.6 $response = $moduleIns->getRecords(null, null, null, 1, 100, null); // to get the records(parameter - custom_view_id,field_api_name,sort_order,customHeaders is optional and can be given null if not required), customheader is a keyvalue pair for eg("if-modified-since"=>"2008-09-15T15:53:00")*/
-    $param_map=array("page"=>2,"per_page"=>100); // key-value pair containing all the parameters - optional
-    $header_map = array("if-modified-since"=>"2019-09-15T15:26:49+05:30"); // key-value pair containing all the headers - optional
-    for($i=0;$i<1;$i++){
-      $response = $moduleIns->getRecords($param_map,$header_map); // to get the records($param_map - parameter map,$header_map - header map
-      $param_map['page'] = $param_map['page']+$param_map['per_page'];
+    $param_map=array("page"=>$page,"per_page"=>$per_page/*, 'sort_order'=>'desc', 'sort_by'=>'Start_DateTime'*/); // key-value pair containing all the parameters - optional
+    $header_map = array("if-modified-since"=>$time_since); // key-value pair containing all the headers - optional
+    $header_map = [];
+    for($i=0;$i<100;$i++)
+    {
+      echo $i."\n";
+      try
+      {
+        $response = $moduleIns->getRecords($param_map,$header_map); // to get the records($param_map - parameter map,$header_map - header map
+      }
+      catch(\Exception $e){
+        continue;
+      }
+
+      #$param_map['page'] = $param_map['page']+$param_map['per_page'];
+      $param_map['page'] = $param_map['page'] + 1;
       $records = $response->getData(); // To get response data
+      echo $i . '$records= ' . count($records)."\n";
+      print_r($param_map);echo "\n\n";
       try {
         foreach ($records as $record) {
           $a_result = [];
+          $a_result['id'] = $record->getEntityId();
           /*echo "\n\n";
           echo "getEntityId= ".$record->getEntityId()."\n"; // To get record id
           echo "getModuleApiName= ".$record->getModuleApiName()."\n"; // To get module api name
-          echo "getLookupLabel= ".$record->getLookupLabel()."\n"; // To get lookup object name
+          echo "getLookupLabel= ".$record->getLookupLabel()."\n"; // To get lookup object name*/
           $createdBy = $record->getCreatedBy();
+          $a_result['created_by']['id'] = $createdBy->getId();
+          $a_result['created_by']['name'] = $createdBy->getName();
           echo "createdBy getId= ".$createdBy->getId()."\n"; // To get user_id who created the record
           echo "createdBy getName= ".$createdBy->getName()."\n"; // To get user name who created the record
           $modifiedBy = $record->getModifiedBy();
+          $a_result['modified_by']['id'] = $modifiedBy->getId();
+          $a_result['modified_by']['name'] = $modifiedBy->getName();
           echo "modifiedBy getId= ".$modifiedBy->getId()."\n"; // To get user_id who modified the record
           echo "modifiedBy getName= ".$modifiedBy->getName()."\n"; // To get user name who modified the record*/
           $owner = $record->getOwner();
           $a_result['owner']['id'] = $owner->getId();
           $a_result['owner']['name'] = $owner->getName();
-         /* echo "owner getId= ".$owner->getId()."\n"; // To get record owner_id
-          echo "owner getName= ".$owner->getName()."\n"; // To get record owner name*/
+          /* echo "owner getId= ".$owner->getId()."\n"; // To get record owner_id
+           echo "owner getName= ".$owner->getName()."\n"; // To get record owner name*/
 
           $a_result['created_time'] = $owner->getCreatedTime();
-         /* echo "getCreatedTime= ".$record->getCreatedTime()."\n"; // To get record created time
-          echo "getModifiedTime= ".$record->getModifiedTime()."\n"; // To get record modified time
-          echo "getLastActivityTime= ".$record->getLastActivityTime()."\n"; // To get last activity time(latest modify/view time)
-          echo "FieldApiName= ".$record->getFieldValue("FieldApiName")."\n"; // To get particular field value*/
+          /* echo "getCreatedTime= ".$record->getCreatedTime()."\n"; // To get record created time
+           echo "getModifiedTime= ".$record->getModifiedTime()."\n"; // To get record modified time
+           echo "getLastActivityTime= ".$record->getLastActivityTime()."\n"; // To get last activity time(latest modify/view time)
+           echo "FieldApiName= ".$record->getFieldValue("FieldApiName")."\n"; // To get particular field value*/
           $map = $record->getData(); // To get record data as map
           foreach ($map as $key => $value) {
             if ($value instanceof ZCRMRecord) // If value is ZCRMRecord object
@@ -427,9 +448,11 @@ class Exampl
               $a_result['ZCRMRecord'][$module_id]['entity_id'] = $value->getEntityId();
               $a_result['ZCRMRecord'][$module_id]['module_api_name'] = $value->getModuleApiName();
               $a_result['ZCRMRecord'][$module_id]['lookup_label'] = $value->getLookupLabel();
-             /* echo " getEntityId= ".$value->getEntityId()."\n"; // to get the record id
-              echo " getModuleApiName= ".$value->getModuleApiName()."\n"; // to get the api name of the module
-              echo " getLookupLabel= ".$value->getLookupLabel()."\n"; // to get the lookup label of the record*/
+              #$a_result['ZCRMRecord'][$module_id]['all'] = $value->getAllProperties();
+              #$a_result['ZCRMRecord'][$module_id]['all'] = $value->getCreatedBy();
+              /* echo " getEntityId= ".$value->getEntityId()."\n"; // to get the record id
+               echo " getModuleApiName= ".$value->getModuleApiName()."\n"; // to get the api name of the module
+               echo " getLookupLabel= ".$value->getLookupLabel()."\n"; // to get the lookup label of the record*/
             } else // If value is not ZCRMRecord object
             {
               if($key == 'Activity_Type')
@@ -543,9 +566,16 @@ class Exampl
             echo "participants getStatus= ".$participant->getStatus()."\n"; // To get the record's participants' status
           }
           echo "\n\n";*/
-          if($a_result['duration_in_seconds'] == 0 && $a_result['activity_type'] == 'Calls'){
+          if(!isset($activity_types[$a_result['activity_type']]))
+          {
+            $activity_types[$a_result['activity_type']] = 0;
+          }
+          $activity_types[$a_result['activity_type']]++;
+          if((!$a_result['duration_in_seconds'] || $a_result['duration_in_seconds'] == 0) &&
+            $a_result['activity_type'] == 'Calls'/* && $a_result['call_type'] == 'Inbound'*/){
 
             $result_arr[] = $a_result;
+            file_put_contents('a_result.txt', json_encode($a_result), FILE_APPEND|LOCK_EX);
           }
         }
       } catch (ZCRMException $ex) {
@@ -554,7 +584,9 @@ class Exampl
         echo $ex->getFile(); // To get the file name that throws the Exception
       }
     }
-    print_r($result_arr);
+    file_put_contents('result_arr.txt', json_encode($result_arr), FILE_APPEND|LOCK_EX);
+    print_r($activity_types);
+    echo count($result_arr);
   }
   public function getRecord()
   {
