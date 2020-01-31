@@ -452,3 +452,35 @@ Trace::#0 /var/www/test-zoho/zcrm-php-sdk/vendor/zohocrm/php-sdk/src/crm/api/res
 #7 /var/www/test-zoho/zcrm-php-sdk/api/Exampl.php(142): zcrmsdk\crm\crud\ZCRMCustomView->getRecords(Array, Array)
 #8 /var/www/test-zoho/zcrm-php-sdk/api/Exampl.php(633): api\auth\Exampl->getrecords()
 #9 {main}
+2020-01-31 09:47:22 INFO: Access Token has expired. Hence refreshing.
+2020-01-31 10:47:25 INFO: Access Token has expired. Hence refreshing.
+2020-01-31 11:17:51 ERROR: zcrmsdk\crm\exception\ZCRMException Caused by:'Not Modified' in D:\OpenServer\OSPanel\domains\zcrm-php-sdk\vendor\zohocrm\php-sdk\src\crm\api\response\BulkAPIResponse.php(66)
+Trace::#0 D:\OpenServer\OSPanel\domains\zcrm-php-sdk\vendor\zohocrm\php-sdk\src\crm\api\response\CommonAPIResponse.php(76): zcrmsdk\crm\api\response\BulkAPIResponse->handleForFaultyResponses()
+#1 D:\OpenServer\OSPanel\domains\zcrm-php-sdk\vendor\zohocrm\php-sdk\src\crm\api\response\CommonAPIResponse.php(67): zcrmsdk\crm\api\response\CommonAPIResponse->processResponse()
+#2 D:\OpenServer\OSPanel\domains\zcrm-php-sdk\vendor\zohocrm\php-sdk\src\crm\api\response\BulkAPIResponse.php(47): zcrmsdk\crm\api\response\CommonAPIResponse->__construct('HTTP/1.1 304 \r\n...', 304)
+#3 D:\OpenServer\OSPanel\domains\zcrm-php-sdk\vendor\zohocrm\php-sdk\src\crm\api\APIRequest.php(148): zcrmsdk\crm\api\response\BulkAPIResponse->__construct('HTTP/1.1 304 \r\n...', 304)
+#4 D:\OpenServer\OSPanel\domains\zcrm-php-sdk\vendor\zohocrm\php-sdk\src\crm\api\handler\MassEntityAPIHandler.php(291): zcrmsdk\crm\api\APIRequest->getBulkAPIResponse()
+#5 D:\OpenServer\OSPanel\domains\zcrm-php-sdk\vendor\zohocrm\php-sdk\src\crm\crud\ZCRMModule.php(1082): zcrmsdk\crm\api\handler\MassEntityAPIHandler->getRecords(Array, Array)
+#6 D:\OpenServer\OSPanel\domains\zcrm-php-sdk\api\Exampl.php(395): zcrmsdk\crm\crud\ZCRMModule->getRecords(Array, Array)
+#7 D:\OpenServer\OSPanel\domains\zcrm-php-sdk\api\Exampl.php(679): api\auth\Exampl->getRecord1s()
+#8 {main}
+2020-01-31 11:20:04 ERROR: zcrmsdk\crm\exception\ZCRMException Caused by:'Not Modified' in D:\OpenServer\OSPanel\domains\zcrm-php-sdk\vendor\zohocrm\php-sdk\src\crm\api\response\BulkAPIResponse.php(66)
+Trace::#0 D:\OpenServer\OSPanel\domains\zcrm-php-sdk\vendor\zohocrm\php-sdk\src\crm\api\response\CommonAPIResponse.php(76): zcrmsdk\crm\api\response\BulkAPIResponse->handleForFaultyResponses()
+#1 D:\OpenServer\OSPanel\domains\zcrm-php-sdk\vendor\zohocrm\php-sdk\src\crm\api\response\CommonAPIResponse.php(67): zcrmsdk\crm\api\response\CommonAPIResponse->processResponse()
+#2 D:\OpenServer\OSPanel\domains\zcrm-php-sdk\vendor\zohocrm\php-sdk\src\crm\api\response\BulkAPIResponse.php(47): zcrmsdk\crm\api\response\CommonAPIResponse->__construct('HTTP/1.1 304 \r\n...', 304)
+#3 D:\OpenServer\OSPanel\domains\zcrm-php-sdk\vendor\zohocrm\php-sdk\src\crm\api\APIRequest.php(148): zcrmsdk\crm\api\response\BulkAPIResponse->__construct('HTTP/1.1 304 \r\n...', 304)
+#4 D:\OpenServer\OSPanel\domains\zcrm-php-sdk\vendor\zohocrm\php-sdk\src\crm\api\handler\MassEntityAPIHandler.php(291): zcrmsdk\crm\api\APIRequest->getBulkAPIResponse()
+#5 D:\OpenServer\OSPanel\domains\zcrm-php-sdk\vendor\zohocrm\php-sdk\src\crm\crud\ZCRMModule.php(1082): zcrmsdk\crm\api\handler\MassEntityAPIHandler->getRecords(Array, Array)
+#6 D:\OpenServer\OSPanel\domains\zcrm-php-sdk\api\Exampl.php(395): zcrmsdk\crm\crud\ZCRMModule->getRecords(Array, Array)
+#7 D:\OpenServer\OSPanel\domains\zcrm-php-sdk\api\Exampl.php(678): api\auth\Exampl->getRecord1s()
+#8 {main}
+2020-01-31 11:20:24 ERROR: zcrmsdk\crm\exception\ZCRMException Caused by:'Not Modified' in D:\OpenServer\OSPanel\domains\zcrm-php-sdk\vendor\zohocrm\php-sdk\src\crm\api\response\BulkAPIResponse.php(66)
+Trace::#0 D:\OpenServer\OSPanel\domains\zcrm-php-sdk\vendor\zohocrm\php-sdk\src\crm\api\response\CommonAPIResponse.php(76): zcrmsdk\crm\api\response\BulkAPIResponse->handleForFaultyResponses()
+#1 D:\OpenServer\OSPanel\domains\zcrm-php-sdk\vendor\zohocrm\php-sdk\src\crm\api\response\CommonAPIResponse.php(67): zcrmsdk\crm\api\response\CommonAPIResponse->processResponse()
+#2 D:\OpenServer\OSPanel\domains\zcrm-php-sdk\vendor\zohocrm\php-sdk\src\crm\api\response\BulkAPIResponse.php(47): zcrmsdk\crm\api\response\CommonAPIResponse->__construct('HTTP/1.1 304 \r\n...', 304)
+#3 D:\OpenServer\OSPanel\domains\zcrm-php-sdk\vendor\zohocrm\php-sdk\src\crm\api\APIRequest.php(148): zcrmsdk\crm\api\response\BulkAPIResponse->__construct('HTTP/1.1 304 \r\n...', 304)
+#4 D:\OpenServer\OSPanel\domains\zcrm-php-sdk\vendor\zohocrm\php-sdk\src\crm\api\handler\MassEntityAPIHandler.php(291): zcrmsdk\crm\api\APIRequest->getBulkAPIResponse()
+#5 D:\OpenServer\OSPanel\domains\zcrm-php-sdk\vendor\zohocrm\php-sdk\src\crm\crud\ZCRMModule.php(1082): zcrmsdk\crm\api\handler\MassEntityAPIHandler->getRecords(Array, Array)
+#6 D:\OpenServer\OSPanel\domains\zcrm-php-sdk\api\Exampl.php(395): zcrmsdk\crm\crud\ZCRMModule->getRecords(Array, Array)
+#7 D:\OpenServer\OSPanel\domains\zcrm-php-sdk\api\Exampl.php(678): api\auth\Exampl->getRecord1s()
+#8 {main}

@@ -133,14 +133,16 @@ class Exampl
   }
   public function getrecords()
   {
-    /* For VERSION <=2.0.6 $customviewinstance = ZCRMRestClient::getCustomViewInstance( "{module_apiname}","{customView_id}");
-    $response = ZCRMRestClient::getCustomViewInstance("{module_api_name","{custom_view_id}" )->getRecords("{field_api_name}", "{sort_order}", (start_index),(end_index) ); // to get the records(parameter - ,field_api_name-to sortby,sort_order(asc or desc),starting index,ending index */
-    $param_map=array("page"=>10,"per_page"=>10); // key-value pair containing all the parameters - optional
-    $header_map = array("if-modified-since"=>"2019-11-15T15:26:49+05:30");//key-value pair  containing Headers to be passed    -optional
+    $record = ZCRMRestClient::getInstance()->getRecordInstance("{module_api_name}", "{record_id}"); // To get record instance
+    /* For VERSION <=2.0.6 $relatedlistrecords = $record->getRelatedListRecords("Attachments")->getData(); // to get the related list records in form of ZCRMRecord instance*/
+
+    $param_map=array("page"=>"1","per_page"=>"200"); // key-value pair containing all the parameters - optional
+    $header_map = array("if-modified-since"=>"2019-10-10T15:26:49+05:30"); // key-value pair containing all the headers - optional
+    $relatedlistrecords = $record->getRelatedListRecords("Attachments",$param_map,$header_map)->getData(); // to get the related list records in form of ZCRMRecord instance
 
     //Calls
-    $response = ZCRMRestClient::getCustomViewInstance("Activities","as" )->getRecords($param_map, $header_map );//to get the records($param_map - parameter map,$header_map - header map
-    $records = $response->getData();
+    /*$response = ZCRMRestClient::getCustomViewInstance("Activities","as" )->getRecords($param_map, $header_map );//to get the records($param_map - parameter map,$header_map - header map
+    $records = $response->getData();*/
     try {
       foreach ($records as $record) {
         echo "\n\n";
@@ -383,129 +385,176 @@ class Exampl
   }
   public function getRecord1s()
   {
-    $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance("Calls"); // To get module instance
+
+    $result_arr = [];
+    $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance("Activities"); // To get module instance
     /* For VERSION <=2.0.6 $response = $moduleIns->getRecords(null, null, null, 1, 100, null); // to get the records(parameter - custom_view_id,field_api_name,sort_order,customHeaders is optional and can be given null if not required), customheader is a keyvalue pair for eg("if-modified-since"=>"2008-09-15T15:53:00")*/
-    $param_map=array("page"=>10,"per_page"=>10); // key-value pair containing all the parameters - optional
-    $header_map = array("if-modified-since"=>"2019-11-15T15:26:49+05:30"); // key-value pair containing all the headers - optional
-    $response = $moduleIns->getRecords($param_map,$header_map); // to get the records($param_map - parameter map,$header_map - header map
-    $records = $response->getData(); // To get response data
+    $param_map=array("page"=>2,"per_page"=>100); // key-value pair containing all the parameters - optional
+    $header_map = array("if-modified-since"=>"2019-09-15T15:26:49+05:30"); // key-value pair containing all the headers - optional
+    for($i=0;$i<1;$i++){
+      $response = $moduleIns->getRecords($param_map,$header_map); // to get the records($param_map - parameter map,$header_map - header map
+      $param_map['page'] = $param_map['page']+$param_map['per_page'];
+      $records = $response->getData(); // To get response data
+      try {
+        foreach ($records as $record) {
+          $a_result = [];
+          /*echo "\n\n";
+          echo "getEntityId= ".$record->getEntityId()."\n"; // To get record id
+          echo "getModuleApiName= ".$record->getModuleApiName()."\n"; // To get module api name
+          echo "getLookupLabel= ".$record->getLookupLabel()."\n"; // To get lookup object name
+          $createdBy = $record->getCreatedBy();
+          echo "createdBy getId= ".$createdBy->getId()."\n"; // To get user_id who created the record
+          echo "createdBy getName= ".$createdBy->getName()."\n"; // To get user name who created the record
+          $modifiedBy = $record->getModifiedBy();
+          echo "modifiedBy getId= ".$modifiedBy->getId()."\n"; // To get user_id who modified the record
+          echo "modifiedBy getName= ".$modifiedBy->getName()."\n"; // To get user name who modified the record*/
+          $owner = $record->getOwner();
+          $a_result['owner']['id'] = $owner->getId();
+          $a_result['owner']['name'] = $owner->getName();
+         /* echo "owner getId= ".$owner->getId()."\n"; // To get record owner_id
+          echo "owner getName= ".$owner->getName()."\n"; // To get record owner name*/
 
-    try {
-      foreach ($records as $record) {
-        echo "\n\n";
-        echo $record->getEntityId(); // To get record id
-        echo $record->getModuleApiName(); // To get module api name
-        echo $record->getLookupLabel(); // To get lookup object name
-        $createdBy = $record->getCreatedBy();
-        echo $createdBy->getId(); // To get user_id who created the record
-        echo $createdBy->getName(); // To get user name who created the record
-        $modifiedBy = $record->getModifiedBy();
-        echo $modifiedBy->getId(); // To get user_id who modified the record
-        echo $modifiedBy->getName(); // To get user name who modified the record
-        $owner = $record->getOwner();
-        echo $owner->getId(); // To get record owner_id
-        echo $owner->getName(); // To get record owner name
-        echo $record->getCreatedTime(); // To get record created time
-        echo $record->getModifiedTime(); // To get record modified time
-        echo $record->getLastActivityTime(); // To get last activity time(latest modify/view time)
-        echo $record->getFieldValue("FieldApiName"); // To get particular field value
-        $map = $record->getData(); // To get record data as map
-        foreach ($map as $key => $value) {
-          if ($value instanceof ZCRMRecord) // If value is ZCRMRecord object
-          {
-            echo $value->getEntityId(); // to get the record id
-            echo $value->getModuleApiName(); // to get the api name of the module
-            echo $value->getLookupLabel(); // to get the lookup label of the record
-          } else // If value is not ZCRMRecord object
-          {
-            echo $key . ":" ;print_r($value);
-
-
-          }
-        }
-        /**
-         * Fields which start with "$" are considered to be property fields *
-         */
-        echo $record->getProperty('$fieldName'); // To get a particular property value
-        $properties = $record->getAllProperties(); // To get record properties as map
-        foreach ($properties as $key => $value) {
-          if (is_array($value)) // If value is an array
-          {
-            echo "KEY::" . $key . "=";
-            foreach ($value as $key1 => $value1) {
-              if (is_array($value1)) {
-                foreach ($value1 as $key2 => $value2) {
-                  echo $key2 . ":" . $value2;
-                }
-              } else {
-                echo $key1 . ":" . $value1;
+          $a_result['created_time'] = $owner->getCreatedTime();
+         /* echo "getCreatedTime= ".$record->getCreatedTime()."\n"; // To get record created time
+          echo "getModifiedTime= ".$record->getModifiedTime()."\n"; // To get record modified time
+          echo "getLastActivityTime= ".$record->getLastActivityTime()."\n"; // To get last activity time(latest modify/view time)
+          echo "FieldApiName= ".$record->getFieldValue("FieldApiName")."\n"; // To get particular field value*/
+          $map = $record->getData(); // To get record data as map
+          foreach ($map as $key => $value) {
+            if ($value instanceof ZCRMRecord) // If value is ZCRMRecord object
+            {
+              $module_id = $value->getModuleApiName();
+              $a_result['ZCRMRecord'][$module_id]['entity_id'] = $value->getEntityId();
+              $a_result['ZCRMRecord'][$module_id]['module_api_name'] = $value->getModuleApiName();
+              $a_result['ZCRMRecord'][$module_id]['lookup_label'] = $value->getLookupLabel();
+             /* echo " getEntityId= ".$value->getEntityId()."\n"; // to get the record id
+              echo " getModuleApiName= ".$value->getModuleApiName()."\n"; // to get the api name of the module
+              echo " getLookupLabel= ".$value->getLookupLabel()."\n"; // to get the lookup label of the record*/
+            } else // If value is not ZCRMRecord object
+            {
+              if($key == 'Activity_Type')
+              {
+                $a_result['activity_type'] = $value;
               }
+              if($key == 'Priority')
+              {
+                $a_result['priority'] = $value;
+              }
+              if($key == 'Call_Start_Time')
+              {
+                $a_result['call_start_time'] = $value;
+              }
+              if($key == 'Call_Duration')
+              {
+                $a_result['call_duration'] = $value;
+              }
+              if($key == 'Subject')
+              {
+                $a_result['subject'] = $value;
+              }
+              if($key == 'Call_Type')
+              {
+                $a_result['call_type'] = $value;
+              }
+              if($key == 'Call_Status')
+              {
+                $a_result['call_status'] = $value;
+              }
+              if($key == 'Call_Duration_in_seconds')
+              {
+                $a_result['duration_in_seconds'] = $value;
+              }
+              #echo " key= ".$key . ":" . $value."\n";
             }
-          } else {
-            echo $key . ":" . $value;
+          }
+          /**
+           * Fields which start with "$" are considered to be property fields *
+           */
+          /*echo '$fieldName= '.$record->getProperty('$fieldName')."\n"; // To get a particular property value
+          $properties = $record->getAllProperties(); // To get record properties as map
+          foreach ($properties as $key => $value) {
+            if (is_array($value)) // If value is an array
+            {
+              echo " KEY::" . $key . "=";
+              foreach ($value as $key1 => $value1) {
+                if (is_array($value1)) {
+                  foreach ($value1 as $key2 => $value2) {
+                    echo "  key2= ".$key2 . ":" . $value2."\n";
+                  }
+                } else {
+                  echo "  key1= ".$key1 . ":" . $value1."\n";
+                }
+              }
+            } else {
+              echo " key= ".$key . ":" . $value."\n";
+            }
+          }
+          $layouts = $record->getLayout(); // To get record layout
+          if($layouts){
+
+            echo"layouts getId= ". $layouts->getId()."\n"; // To get layout_id
+            echo"layouts getName= ". $layouts->getName()."\n"; // To get layout name
+          }
+
+          $taxlists = $record->getTaxList(); // To get the tax list
+          foreach ($taxlists as $taxlist) {
+            echo "taxlists getTaxName= ".$taxlist->getTaxName()."\n"; // To get tax name
+            echo "taxlists getPercentage= ".$taxlist->getPercentage()."\n"; // To get tax percentage
+            echo "taxlists getValue= ". $taxlist->getValue()."\n"; // To get tax value
+          }
+          $lineItems = $record->getLineItems(); // To get line_items as map
+          foreach ($lineItems as $lineItem) {
+            echo "lineItems getId= ".$lineItem->getId()."\n"; // To get line_item id
+            echo "lineItems getListPrice= ".$lineItem->getListPrice()."\n"; // To get line_item list price
+            echo "lineItems getQuantity= ".$lineItem->getQuantity()."\n"; // To get line_item quantity
+            echo "lineItems getDescription= ".$lineItem->getDescription()."\n"; // To get line_item description
+            echo "lineItems getTotal= ".$lineItem->getTotal()."\n"; // To get line_item total amount
+            echo "lineItems getDiscount= ".$lineItem->getDiscount()."\n"; // To get line_item discount
+            echo "lineItems getDiscountPercentage= ".$lineItem->getDiscountPercentage()."\n"; // To get line_item discount percentage
+            echo "lineItems getTotalAfterDiscount= ".$lineItem->getTotalAfterDiscount()."\n"; // To get line_item amount after discount
+            echo "lineItems getTaxAmount= ".$lineItem->getTaxAmount()."\n"; // To get line_item tax amount
+            echo "lineItems getNetTotal= ".$lineItem->getNetTotal()."\n"; // To get line_item net total amount
+            echo "lineItems getDeleteFlag= ".$lineItem->getDeleteFlag()."\n"; // To get line_item delete flag
+            echo "lineItems getProduct getEntityId= ".$lineItem->getProduct()->getEntityId()."\n"; // To get line_item product's entity id
+            echo "lineItems getProduct getLookupLabel= ".$lineItem->getProduct()->getLookupLabel()."\n"; // To get line_item product's lookup label
+            $linTaxs = $lineItem->getLineTax(); // To get line_item's line_tax as array
+            foreach ($linTaxs as $lineTax) {
+              echo "getLineTax getTaxName= ".$lineTax->getTaxName()."\n"; // To get line_tax name
+              echo "getLineTax getPercentage= ".$lineTax->getPercentage()."\n"; // To get line_tax percentage
+              echo "getLineTax getValue= ".$lineTax->getValue()."\n"; // To get line_tax value
+            }
+          }
+          $pricedetails = $record->getPriceDetails(); // To get the price_details array
+          foreach ($pricedetails as $pricedetail) {
+            echo "\n\n";
+            echo "pricedetails getId= ".$pricedetail->getId()."\n"; // To get the record's price_id
+            echo "pricedetails getToRange= ".$pricedetail->getToRange()."\n"; // To get the price_detail record's to_range
+            echo "pricedetails getFromRange= ".$pricedetail->getFromRange()."\n"; // To get price_detail record's from_range
+            echo "pricedetails getDiscount= ".$pricedetail->getDiscount()."\n"; // To get price_detail record's discount
+            echo "\n\n";
+          }
+          $participants = $record->getParticipants(); // To get Event record's participants
+          foreach ($participants as $participant) {
+            echo "participants getName= ".$participant->getName()."\n"; // To get the record's participant name
+            echo "participants getEmail= ".$participant->getEmail()."\n"; // To get the record's participant email
+            echo "participants getId= ".$participant->getId()."\n"; // To get the record's participant id
+            echo "participants getType= ".$participant->getType()."\n"; // To get the record's participant type
+            echo "participants isInvited= ".$participant->isInvited()."\n"; // To check if the record's participant(s) are invited or not
+            echo "participants getStatus= ".$participant->getStatus()."\n"; // To get the record's participants' status
+          }
+          echo "\n\n";*/
+          if($a_result['duration_in_seconds'] == 0 && $a_result['activity_type'] == 'Calls'){
+
+            $result_arr[] = $a_result;
           }
         }
-        $layouts = $record->getLayout(); // To get record layout
-        if($layouts){
-
-          echo $layouts->getId(); // To get layout_id
-          echo $layouts->getName(); // To get layout name
-        }
-
-        $taxlists = $record->getTaxList(); // To get the tax list
-        foreach ($taxlists as $taxlist) {
-          echo $taxlist->getTaxName(); // To get tax name
-          echo $taxlist->getPercentage(); // To get tax percentage
-          echo $taxlist->getValue(); // To get tax value
-        }
-        $lineItems = $record->getLineItems(); // To get line_items as map
-        foreach ($lineItems as $lineItem) {
-          echo $lineItem->getId(); // To get line_item id
-          echo $lineItem->getListPrice(); // To get line_item list price
-          echo $lineItem->getQuantity(); // To get line_item quantity
-          echo $lineItem->getDescription(); // To get line_item description
-          echo $lineItem->getTotal(); // To get line_item total amount
-          echo $lineItem->getDiscount(); // To get line_item discount
-          echo $lineItem->getDiscountPercentage(); // To get line_item discount percentage
-          echo $lineItem->getTotalAfterDiscount(); // To get line_item amount after discount
-          echo $lineItem->getTaxAmount(); // To get line_item tax amount
-          echo $lineItem->getNetTotal(); // To get line_item net total amount
-          echo $lineItem->getDeleteFlag(); // To get line_item delete flag
-          echo $lineItem->getProduct()->getEntityId(); // To get line_item product's entity id
-          echo $lineItem->getProduct()->getLookupLabel(); // To get line_item product's lookup label
-          $linTaxs = $lineItem->getLineTax(); // To get line_item's line_tax as array
-          foreach ($linTaxs as $lineTax) {
-            echo $lineTax->getTaxName(); // To get line_tax name
-            echo $lineTax->getPercentage(); // To get line_tax percentage
-            echo $lineTax->getValue(); // To get line_tax value
-          }
-        }
-        $pricedetails = $record->getPriceDetails(); // To get the price_details array
-        foreach ($pricedetails as $pricedetail) {
-          echo "\n\n";
-          echo $pricedetail->getId(); // To get the record's price_id
-          echo $pricedetail->getToRange(); // To get the price_detail record's to_range
-          echo $pricedetail->getFromRange(); // To get price_detail record's from_range
-          echo $pricedetail->getDiscount(); // To get price_detail record's discount
-          echo "\n\n";
-        }
-        $participants = $record->getParticipants(); // To get Event record's participants
-        foreach ($participants as $participant) {
-          echo $participant->getName(); // To get the record's participant name
-          echo $participant->getEmail(); // To get the record's participant email
-          echo $participant->getId(); // To get the record's participant id
-          echo $participant->getType(); // To get the record's participant type
-          echo $participant->isInvited(); // To check if the record's participant(s) are invited or not
-          echo $participant->getStatus(); // To get the record's participants' status
-        }
-        /* End Event  */
-
+      } catch (ZCRMException $ex) {
+        echo $ex->getMessage(); // To get ZCRMException error message
+        echo $ex->getExceptionCode(); // To get ZCRMException error code
+        echo $ex->getFile(); // To get the file name that throws the Exception
       }
-    } catch (ZCRMException $ex) {
-      echo $ex->getMessage(); // To get ZCRMException error message
-      echo $ex->getExceptionCode(); // To get ZCRMException error code
-      echo $ex->getFile(); // To get the file name that throws the Exception
     }
+    print_r($result_arr);
   }
   public function getRecord()
   {
